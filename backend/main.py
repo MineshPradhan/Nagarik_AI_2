@@ -62,6 +62,25 @@ app = FastAPI(
     version="0.1.0"
 )
 
+@app.get("/api/triage-queue")
+async def get_triage_queue():
+    """
+    Return current Triage_Queue sorted by stall_risk_score descending with
+    bilingual stall reasons.
+
+    Validates: Requirements 20.2, 20.3
+    """
+    try:
+        queue = stall_risk_predictor.get_triage_queue(threshold=0.6)
+        result = []
+        for assessment in queue:
+            d = asdict(assessment)
+            d["computed_at"] = assessment.computed_at.isoformat()
+            result.append(d)
+        return {"triage_queue": result, "total": len(result)}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error fetching triage queue: {str(e)}")
+
 app.mount("/", StaticFiles(directory="static", html=True), name="static")
 
 # Configure CORS for local development
@@ -795,24 +814,24 @@ async def guidance_transcribe(
         raise HTTPException(status_code=500, detail=f"Error transcribing audio: {str(e)}")
 
 
-@app.get("/api/triage-queue")
-async def get_triage_queue():
-    """
-    Return current Triage_Queue sorted by stall_risk_score descending with
-    bilingual stall reasons.
+# @app.get("/api/triage-queue")
+# async def get_triage_queue():
+#     """
+#     Return current Triage_Queue sorted by stall_risk_score descending with
+#     bilingual stall reasons.
 
-    Validates: Requirements 20.2, 20.3
-    """
-    try:
-        queue = stall_risk_predictor.get_triage_queue(threshold=0.6)
-        result = []
-        for assessment in queue:
-            d = asdict(assessment)
-            d["computed_at"] = assessment.computed_at.isoformat()
-            result.append(d)
-        return {"triage_queue": result, "total": len(result)}
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Error fetching triage queue: {str(e)}")
+#     Validates: Requirements 20.2, 20.3
+#     """
+#     try:
+#         queue = stall_risk_predictor.get_triage_queue(threshold=0.6)
+#         result = []
+#         for assessment in queue:
+#             d = asdict(assessment)
+#             d["computed_at"] = assessment.computed_at.isoformat()
+#             result.append(d)
+#         return {"triage_queue": result, "total": len(result)}
+#     except Exception as e:
+#         raise HTTPException(status_code=500, detail=f"Error fetching triage queue: {str(e)}")
 
 
 @app.post("/api/application/{application_id}/stall-risk")
