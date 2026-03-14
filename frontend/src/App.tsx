@@ -165,6 +165,7 @@ function AppContent() {
           </div>
         </header>
 
+{/* Hello */}
         <nav className="nav" role="navigation" aria-label="Main navigation">
           <NavLink to="/" end className={({ isActive }) => 'nav-link' + (isActive ? ' active' : '')}>
             {t('nav.beneficiary')}
