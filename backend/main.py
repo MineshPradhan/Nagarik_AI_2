@@ -50,6 +50,9 @@ from models.stall_risk_predictor import StallRiskPredictor
 from models.offline_cache_manager import OfflineCacheManager
 from datetime import datetime, timedelta
 from dataclasses import asdict
+from fastapi.staticfiles import StaticFiles
+
+app.mount("/", StaticFiles(directory="static", html=True), name="static")
 import uuid
 
 
