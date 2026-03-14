@@ -1,10 +1,6 @@
-"""
-Manual API test to verify the beneficiary discovery endpoint
-"""
 import requests
 import json
 
-# Test data - death record that should match ration card data
 death_record = {
     "record_id": "CDR001",
     "name": "राम कुमार शर्मा",
@@ -17,9 +13,10 @@ death_record = {
     "registration_date": "2023-03-18"
 }
 
-# Make request to the API
-response = requests.post("http://127.0.0.1:8000/api/beneficiary/discover", json=death_record)
+response = requests.post(
+    "http://127.0.0.1:10000/api/beneficiary/discover",
+    json=death_record
+)
 
-print(f"Status Code: {response.status_code}")
-print(f"\nResponse:")
+print("Status Code:", response.status_code)
 print(json.dumps(response.json(), indent=2, ensure_ascii=False))

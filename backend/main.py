@@ -52,7 +52,6 @@ from datetime import datetime, timedelta
 from dataclasses import asdict
 from fastapi.staticfiles import StaticFiles
 
-app.mount("/", StaticFiles(directory="static", html=True), name="static")
 import uuid
 
 
@@ -63,10 +62,13 @@ app = FastAPI(
     version="0.1.0"
 )
 
+app.mount("/", StaticFiles(directory="static", html=True), name="static")
+
 # Configure CORS for local development
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000", "http://localhost:3001", "http://localhost:5173"],  # React dev servers
+    allow_origins=["*"],  # allow all origins
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
