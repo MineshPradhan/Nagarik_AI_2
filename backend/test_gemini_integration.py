@@ -18,7 +18,7 @@ def test_guidance_query(question, test_name):
     print(f"Question: {question}")
     print(f"Question length: {len(question)} characters")
     
-    url = "http://localhost:8000/api/guidance/query"
+    url = "https://nagarik-ai-2.onrender.com/api/guidance/query"
     payload = {
         "intent": "eligibility_criteria",
         "scheme_type": "old_age_pension",
